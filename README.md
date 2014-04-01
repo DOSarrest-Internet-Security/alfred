@@ -3,7 +3,7 @@ alfred
 
 ![Logo](http://www.dosarrest.com/templates/corporative/images/logo.gif "Logo")
 
-Alfred, the ElasticSearch Butler created by Colton McInroy with DOSarrest Internet Security
+Alfred, the ElasticSearch Butler created by Colton McInroy with [DOSarrest Internet Security](http://www.dosarrest.com/)
 
 [Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.1.jar)
 
