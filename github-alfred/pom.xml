@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.dosarrest.alfred</groupId>
+  <artifactId>alfred</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Alfred</name>
+  <description>This is an ElasticSearch Butler</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>joda-time</groupId>
+  		<artifactId>joda-time</artifactId>
+  		<version>2.3</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpcore</artifactId>
+  		<version>4.3.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.google.code.gson</groupId>
+  		<artifactId>gson</artifactId>
+  		<version>2.2.4</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpclient</artifactId>
+  		<version>4.3.3</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-cli</groupId>
+  		<artifactId>commons-cli</artifactId>
+  		<version>1.2</version>
+  	</dependency>
+  </dependencies>
+  <organization>
+  	<name>DOSarrest Internet Security</name>
+  	<url>http://www.dosarrest.com/</url>
+  </organization>
+</project>
