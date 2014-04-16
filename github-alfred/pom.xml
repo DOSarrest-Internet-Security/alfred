@@ -36,7 +36,17 @@
   	<name>DOSarrest Internet Security</name>
   	<url>http://www.dosarrest.com/</url>
   </organization>
-  <properties>
-  	<java.level>6</java.level>
-  </properties>
+  <build>
+  	<plugins>
+  		<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.0</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+  	</plugins>
+  </build>
 </project>
