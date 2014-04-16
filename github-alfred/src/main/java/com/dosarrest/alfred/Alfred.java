@@ -13,7 +13,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
@@ -698,7 +697,6 @@ public class Alfred {
 	 * Set the command line options that are available
 	 */
 	private static void setOptions() {
-		OptionGroup og1 = new OptionGroup();
 		options.addOption(null, "host", true, "ElasticSearch Host");
 		options.addOption(null, "port", true, "ElasticSearch Port");
 		options.addOption(null, "ssl", false, "ElasticSearch SSL");
@@ -706,36 +704,31 @@ public class Alfred {
 		options.addOption("t", "timeout", true, "ElasticSearch Timeout (Default 30)");
 		options.addOption("s", "style", true, "Clean up style (time|size) (Default time)");
 		Option op1 = new Option("T", "time-unit", true, "Specify time units (hour|day|none) (Default hour)");
-		og1.addOption(op1);
+		options.addOption(op1);
 		Option op2 = new Option("e", "expiretime", true, "Number of time units old (Default 24)");
-		og1.addOption(op2);
-		options.addOptionGroup(og1);
+		options.addOption(op2);
 		
-		OptionGroup og2 = new OptionGroup();
 		Option op3 = new Option("f", "flush", false, "Flush Indexes");
-		og2.addOption(op3);
+		options.addOption(op3);
 		Option op4 = new Option("d", "delete", false, "Delete Indexes");
-		og2.addOption(op4);
+		options.addOption(op4);
 		Option op5 = new Option("c", "close", false, "Close Indexes");
-		og2.addOption(op5);
+		options.addOption(op5);
 		Option op6 = new Option("O", "open", false, "Open Indexes");
-		og2.addOption(op6);
+		options.addOption(op6);
 		Option op7 = new Option("b", "debloom", false, "Disable Bloom on Indexes");
-		og2.addOption(op7);
+		options.addOption(op7);
 		Option op8 = new Option("B", "bloom", false, "Enable Bloom on Indexes");
-		og2.addOption(op8);
+		options.addOption(op8);
 		Option op9 = new Option("o", "optimize", false, "Optimize Indexes");
-		og2.addOption(op9);
+		options.addOption(op9);
 		Option op10 = new Option(null, "max_num_segments", true, "Optimize max_num_segments (Default 2)");
-		og2.addOption(op10);
+		options.addOption(op10);
 		Option op11 = new Option("S", "settings", true, "PUT settings");
-		og2.addOption(op11);
-		options.addOptionGroup(og2);
+		options.addOption(op11);
 		
-		OptionGroup og3 = new OptionGroup();
 		Option op12 = new Option("E", "expiresize", true, "Byte size limit  (Default 10 GB)");
-		og3.addOption(op12);
-		options.addOptionGroup(og3);
+		options.addOption(op12);
 		
 		options.addOption(null, "examples", false, "Show some examples of how to use Alfred");
 		options.addOption("r", "run", false, "Required to execute changes on ElasticSearch");

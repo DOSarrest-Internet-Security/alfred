@@ -134,7 +134,7 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_flush");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -158,7 +158,7 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_flush");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been flushed.");
@@ -177,7 +177,7 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_close");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -203,7 +203,7 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_close");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been closed.");
@@ -222,7 +222,7 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_open");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -248,7 +248,7 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_close");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been opened.");
@@ -265,7 +265,8 @@ public class Index {
 				try {
 					Alfred.deleteURL("/"+this.name+"/");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					e.printStackTrace();
+					Alfred.println("error", "Exception: "+e.getStackTrace().toString());
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -289,7 +290,8 @@ public class Index {
 				try {
 					Alfred.deleteURL("/"+this.name+"/");
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					e.printStackTrace();
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been deleted.");
@@ -309,7 +311,7 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=true");
 					} catch (Exception e) {
-						Alfred.println("error", "Socket Timeout");
+						Alfred.println("error", "Exception: "+e.getMessage());
 					}
 				} else {
 					if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -337,7 +339,7 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=true");
 					} catch (Exception e) {
-						Alfred.println("error", "Socket Timeout");
+						Alfred.println("error", "Exception: "+e.getMessage());
 					}
 				} else {
 					Alfred.println("general", "Index "+this.name+" would have had bloom filter enabled.");
@@ -358,7 +360,7 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=false");
 					} catch (Exception e) {
-						Alfred.println("error", "Socket Timeout");
+						Alfred.println("error", "Exception: "+e.getMessage());
 					}
 				} else {
 					if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -386,7 +388,7 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=false");
 					} catch (Exception e) {
-						Alfred.println("error", "Socket Timeout");
+						Alfred.println("error", "Exception: "+e.getMessage());
 					}
 				} else {
 					Alfred.println("general", "Index "+this.name+" would have had bloom filter disabled.");
@@ -408,7 +410,7 @@ public class Index {
 					try {
 						Alfred.postURL("/"+this.name+"/_optimize?max_num_segments="+segments);
 					} catch (Exception e) {
-						Alfred.println("error", "Socket Timeout");
+						Alfred.println("error", "Exception: "+e.getMessage());
 					}
 				} else {
 					if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -437,7 +439,7 @@ public class Index {
 					try {
 						Alfred.postURL("/"+this.name+"/_optimize?max_num_segments="+segments);
 					} catch (Exception e) {
-						Alfred.println("error", "Socket Timeout");
+						Alfred.println("error", "Exception: "+e.getMessage());
 					}
 				} else {
 					Alfred.println("general", "Index "+this.name+" would have been optimized.");
@@ -455,7 +457,7 @@ public class Index {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -479,7 +481,7 @@ public class Index {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
 				} catch (Exception e) {
-					Alfred.println("error", "Socket Timeout");
+					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been deleted.");

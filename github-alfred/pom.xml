@@ -36,4 +36,7 @@
   	<name>DOSarrest Internet Security</name>
   	<url>http://www.dosarrest.com/</url>
   </organization>
+  <properties>
+  	<java.level>6</java.level>
+  </properties>
 </project>
