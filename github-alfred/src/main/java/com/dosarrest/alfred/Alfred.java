@@ -2,6 +2,7 @@ package com.dosarrest.alfred;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,7 @@ public class Alfred {
 	private static Boolean bloom = false;
 	private static Boolean debloom = false;
 	private static Boolean optimize = false;
-	public static String[] exclude;
+	public static String[] excludes;
 	public static String settings = "";
 	private static int max_num_segments = 2;
 	private static Boolean flush = false;
@@ -247,8 +248,16 @@ public class Alfred {
 				Set<Entry<String, JsonElement>> indicesSet = indices.entrySet();
 				for (Entry<String, JsonElement> indexEntry : indicesSet) {
 					String name = indexEntry.getKey();
-					indexes.put(name, new Index(name, true));
-					i++;
+					Boolean hasExclude = false;
+					for (String exclude : excludes) {
+						if (name.contains(exclude)) {
+							hasExclude = true;
+						}
+					}
+					if (hasExclude==false) {
+						indexes.put(name, new Index(name, true));
+						i++;
+					}
 				}
 			}
 			println("info", i+" Open Indices Loaded");
@@ -646,16 +655,16 @@ public class Alfred {
 				println("debug", "Expire Size Parameter: "+sizeLimit);
 			}
 			if (cmd.hasOption("x")) {
-				exclude = cmd.getOptionValues("x");
+				excludes = cmd.getOptionValues("x");
 				String eString = "";
-				if (exclude.length==1) {
-					eString = exclude[0];
-				} else if (exclude.length!=0) {
-					for (String es : exclude) {
+				if (excludes.length==1) {
+					eString = excludes[0];
+				} else if (excludes.length!=0) {
+					for (String es : excludes) {
 						eString += (eString.equalsIgnoreCase("")?"":",")+es;
 					}
 				}
-				println("debug", "Exclude: "+exclude);
+				println("debug", "Exclude: "+excludes);
 			}
 			delete = cmd.hasOption("delete");
 			if (delete) {
