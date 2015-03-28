@@ -54,6 +54,7 @@ public class Alfred {
 	private static Boolean bloom = false;
 	private static Boolean debloom = false;
 	private static Boolean optimize = false;
+	public static String[] exclude;
 	public static String settings = "";
 	private static int max_num_segments = 2;
 	private static Boolean flush = false;
@@ -62,7 +63,7 @@ public class Alfred {
 	public static Boolean debug = false;
 	public static String verbosity = "info"; // debug|info|warn|error|fatal
 	public static Options options = new Options();
-	private static String version = "0.0.1";
+	private static String version = "0.0.3";
 	private HashMap<String,Index> indexes = new HashMap<String,Index>();
 	public static HashMap<String,Node> nodes = new HashMap<String,Node>();
 	
@@ -644,6 +645,18 @@ public class Alfred {
 				sizeLimit = parseByteSize((String) cmd.getOptionValue("E"));
 				println("debug", "Expire Size Parameter: "+sizeLimit);
 			}
+			if (cmd.hasOption("x")) {
+				exclude = cmd.getOptionValues("x");
+				String eString = "";
+				if (exclude.length==1) {
+					eString = exclude[0];
+				} else if (exclude.length!=0) {
+					for (String es : exclude) {
+						eString += (eString.equalsIgnoreCase("")?"":",")+es;
+					}
+				}
+				println("debug", "Exclude: "+exclude);
+			}
 			delete = cmd.hasOption("delete");
 			if (delete) {
 				println("debug", "Delete Parameter: "+delete);
@@ -729,6 +742,11 @@ public class Alfred {
 		
 		Option op12 = new Option("E", "expiresize", true, "Byte size limit  (Default 10 GB)");
 		options.addOption(op12);
+		
+		Option op13 = new Option("x", "exclude", true, "Index pattern to exclude");
+		op13.setArgs(Option.UNLIMITED_VALUES);
+		op13.setValueSeparator(',');
+		options.addOption(op13);
 		
 		options.addOption(null, "examples", false, "Show some examples of how to use Alfred");
 		options.addOption("r", "run", false, "Required to execute changes on ElasticSearch");

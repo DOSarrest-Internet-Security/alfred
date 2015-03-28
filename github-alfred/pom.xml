@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dosarrest.alfred</groupId>
   <artifactId>alfred</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
   <name>Alfred</name>
   <description>This is an ElasticSearch Butler</description>
   <dependencies>

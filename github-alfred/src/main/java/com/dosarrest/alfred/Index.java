@@ -32,6 +32,7 @@ public class Index {
 	public List<Node> nodes = new ArrayList<Node>();
 	public Boolean open;
 	public Boolean bloom = true;
+	public JsonObject settings;
 	
 	public Index(String name, Boolean open) {
 		this.name = name;
@@ -109,6 +110,7 @@ public class Index {
 				if (bloomValue==false) {
 					this.bloom = false;
 				}
+				this.settings = docStatsO.getAsJsonObject(this.name).getAsJsonObject("settings");
 			} catch (NullPointerException e) {
 				this.bloom = true;
 			}
@@ -453,6 +455,9 @@ public class Index {
 	 */
 	public void putSettings(Period per) {
 		if (this.open==true) {
+			if (checkSettingsChange()) {
+				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
+			}
 			if (Alfred.run) {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
@@ -477,6 +482,9 @@ public class Index {
 	 */
 	public void putSettings() {
 		if (this.open==true) {
+			if (checkSettingsChange()) {
+				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
+			}
 			if (Alfred.run) {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
@@ -487,5 +495,40 @@ public class Index {
 				Alfred.println("general", "Index "+this.name+" would have been deleted.");
 			}
 		}
+	}
+	/**
+	 * Check settings for changes
+	 */
+	public Boolean checkSettingsChange() {
+		Boolean foundChange = false;
+		JsonElement newSettings = new JsonParser().parse(Alfred.settings).getAsJsonObject();
+		Set<Entry<String, JsonElement>> ns = newSettings.getAsJsonObject().entrySet();
+		try {
+			for (Entry<String, JsonElement> entry : ns) {
+				if (entry.getKey().contains(".")) {
+					String[] sections = entry.getKey().split("\\.");
+					JsonElement checkSection = this.settings;
+					for (String section : sections) {
+						checkSection = checkSection.getAsJsonObject().get(section);
+					}
+					if (!entry.getValue().equals(checkSection)) {
+						foundChange = true;
+					}
+				} else {
+					JsonObject checkSection = this.settings.getAsJsonObject();
+					for (Entry<String, JsonElement> section : checkSection.entrySet()) {
+						if (section.getValue().isJsonObject()) {
+							checkSection = checkSection.getAsJsonObject(section.getKey());
+						}
+					}
+					if (!entry.getValue().equals(checkSection)) {
+						foundChange = true;
+					}
+				}
+			}
+		} catch (NullPointerException exp) {
+			foundChange = true;
+		}
+		return foundChange;
 	}
 }
