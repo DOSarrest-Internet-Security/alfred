@@ -1,9 +1,14 @@
 alfred
 ======
 
-![Logo](http://www.dosarrest.com/templates/corporative/images/logo.gif "Logo")
+![Logo](http://www.dosarrest.com/wp-content/uploads/2013/11/logo.gif.png?b99cf4 "Logo")
 
 Alfred, the ElasticSearch Butler created by Colton McInroy with [DOSarrest Internet Security](http://www.dosarrest.com/)
+
+Tested on ElasticSearch Versions:  
+1.0  
+1.1  
+May work on previous versions  
 
 [Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.1.jar)
 
