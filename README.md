@@ -7,10 +7,13 @@ Alfred, the ElasticSearch Butler created by Colton McInroy with [DOSarrest Inter
 
 Tested on ElasticSearch Versions:  
 1.0  
-1.1  
+1.1
+1.2
+1.3
+1.4
 May work on previous versions  
 
-[Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.1.jar)
+[Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.3-SNAPSHOT-jar-with-dependencies.jar)
 
 ```
 usage: alfred
@@ -38,7 +41,8 @@ usage: alfred
  -T,--time-unit <arg>          Specify time units (hour|day|none) (Default
                                hour)
  -t,--timeout <arg>            ElasticSearch Timeout (Default 30)
-Alfred Version: 0.0.1
+ -x,--exclude <arg>            Index pattern to exclude
+Alfred Version: 0.0.3
 ```
 
 Alfred was built as a tool to handle maintenance work on ElasticSearch.
@@ -105,6 +109,10 @@ Delete marvel indices older than 7 days old
 java -jar alfred.jar -i".marvel-*" -b -o -T"day" --max_num_segments=4 -e1
 ```
 Disable bloom filter and optimize marvel indices with max_num_segments=4 over 1 day old
+```
+java -jar alfred.jar -e48 -i"*" -x"marvel,kibana" -d
+```
+Delete all indexes excluding any that contain the keywords "marvel" or "kibana" that are older that 48 hours
 
 
 
