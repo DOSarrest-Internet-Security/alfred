@@ -7,10 +7,10 @@ Alfred, the ElasticSearch Butler created by Colton McInroy with [DOSarrest Inter
 
 Tested on ElasticSearch Versions:  
 1.0  
-1.1
-1.2
-1.3
-1.4
+1.1  
+1.2  
+1.3  
+1.4  
 May work on previous versions  
 
 [Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.3-SNAPSHOT-jar-with-dependencies.jar)
