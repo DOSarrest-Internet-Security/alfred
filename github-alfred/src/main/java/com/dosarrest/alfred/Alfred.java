@@ -56,6 +56,7 @@ public class Alfred {
 	private static Boolean debloom = false;
 	private static Boolean optimize = false;
 	public static String[] excludes;
+	public static String[] allocation;
 	public static String settings = "";
 	private static int max_num_segments = 2;
 	private static Boolean flush = false;
@@ -106,6 +107,7 @@ public class Alfred {
 							if (bloom) { indexInfo.bloom(revPer); }
 							if (debloom) { indexInfo.debloom(revPer); }
 							if (delete) { indexInfo.delete(revPer); }
+							if (allocation.length!=0) { indexInfo.updateRouting(revPer); }
 							if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(revPer); }
 						} else {
 							println("general", index+" is "+per.getHours()+" hours above the cuttoff.");
@@ -129,6 +131,7 @@ public class Alfred {
 							if (bloom) { indexInfo.bloom(revPer); }
 							if (debloom) { indexInfo.debloom(revPer); }
 							if (delete) { indexInfo.delete(revPer); }
+							if (allocation.length!=0) { indexInfo.updateRouting(revPer); }
 							if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(revPer); }
 						} else {
 							println("general", index+" is "+per.getDays()+" days above the cuttoff.");
@@ -147,6 +150,7 @@ public class Alfred {
 						if (bloom) { indexInfo.bloom(); }
 						if (debloom) { indexInfo.debloom(); }
 						if (delete) { indexInfo.delete(); }
+						if (allocation.length!=0) { indexInfo.updateRouting(); }
 						if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(); }
 					}
 				}
@@ -170,6 +174,7 @@ public class Alfred {
 					if (bloom) { indexInfo.bloom(); }
 					if (debloom) { indexInfo.debloom(); }
 					if (delete) { indexInfo.delete(); }
+					if (allocation.length!=0) { indexInfo.updateRouting(); }
 					if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(); }
 				} else {
 					long diff = Math.abs(size-sizeLimit);
@@ -666,6 +671,18 @@ public class Alfred {
 				}
 				println("debug", "Exclude: "+excludes);
 			}
+			if (cmd.hasOption("a")) {
+				allocation = cmd.getOptionValues("a");
+				String eString = "";
+				if (allocation.length==1) {
+					eString = allocation[0];
+				} else if (allocation.length!=0) {
+					for (String es : allocation) {
+						eString += (eString.equalsIgnoreCase("")?"":",")+es;
+					}
+				}
+				println("debug", "Allocations: "+allocation);
+			}
 			delete = cmd.hasOption("delete");
 			if (delete) {
 				println("debug", "Delete Parameter: "+delete);
@@ -756,6 +773,11 @@ public class Alfred {
 		op13.setArgs(Option.UNLIMITED_VALUES);
 		op13.setValueSeparator(',');
 		options.addOption(op13);
+		
+		Option op14 = new Option("a", "allocation", true, "Allocation settings (Ex. require.tag=historical,exclude.tag=realtime)");
+		op14.setArgs(Option.UNLIMITED_VALUES);
+		op14.setValueSeparator(',');
+		options.addOption(op14);
 		
 		options.addOption(null, "examples", false, "Show some examples of how to use Alfred");
 		options.addOption("r", "run", false, "Required to execute changes on ElasticSearch");
