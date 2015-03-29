@@ -455,9 +455,9 @@ public class Index {
 	 */
 	public void putSettings(Period per) {
 		if (this.open==true) {
-			if (checkSettingsChange()) {
-				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
-			}
+//			if (checkSettingsChange()) {
+//				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
+//			}
 			if (Alfred.run) {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
@@ -482,9 +482,9 @@ public class Index {
 	 */
 	public void putSettings() {
 		if (this.open==true) {
-			if (checkSettingsChange()) {
-				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
-			}
+//			if (checkSettingsChange()) {
+//				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
+//			}
 			if (Alfred.run) {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
@@ -492,7 +492,7 @@ public class Index {
 					Alfred.println("error", "Exception: "+e.getMessage());
 				}
 			} else {
-				Alfred.println("general", "Index "+this.name+" would have been deleted.");
+				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
 			}
 		}
 	}
@@ -530,5 +530,83 @@ public class Index {
 			foundChange = true;
 		}
 		return foundChange;
+	}
+	/**
+	 * Check routing settings
+	 */
+	public Boolean checkRouting() {
+		Boolean check = false;
+		for (String route : Alfred.allocation) {
+			try {
+				String[] sRoute = route.split("=");
+				String routeValue = sRoute[1];
+				String[] routeKey = sRoute[0].split("\\.");
+				String routeType = routeKey[0];
+				String routeItem = routeKey[1];
+				JsonObject allocationSettings = settings.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation");
+				if (allocationSettings.has(routeType)) {
+					if (allocationSettings.getAsJsonObject(routeType).has(routeItem)) {
+						if (!allocationSettings.getAsJsonObject(routeType).get(routeItem).getAsString().equalsIgnoreCase(routeValue)) {
+							check = true;
+						}
+					} else {
+						check = true;
+					}
+				} else {
+					check = true;
+				}
+			} catch (Exception e) {
+				Alfred.println("error", "Check Routing Exception: "+e.getMessage());
+			}
+		}
+		return check;
+	}
+	/**
+	 * Change routing settings
+	 */
+	public void updateRouting() {
+		if (this.open==true) {
+			if (Alfred.run) {
+				if (checkRouting()) {
+					try {
+						Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+					} catch (Exception e) {
+						Alfred.println("error", "Exception: "+e.getMessage());
+					}
+				}
+			} else {
+				if (checkRouting()) {
+					Alfred.println("general", "Index "+this.name+" would have had routing changed");
+				}
+			}
+		}
+	}
+	/**
+	 * Change routing settings
+	 */
+	public void updateRouting(Period per) {
+		if (this.open==true) {
+			if (Alfred.run) {
+				if (checkRouting()) {
+					try {
+						Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+					} catch (Exception e) {
+						Alfred.println("error", "Exception: "+e.getMessage());
+					}
+				}
+			} else {
+				if (checkRouting()) {
+					if (this.timeunit.equalsIgnoreCase("hour")) {
+						String expireTime = (per.getYears()!=0?" "+Math.abs(per.getYears())+" year(s)":"")+(per.getDays()!=0?" "+Math.abs(per.getDays())+" day(s)":"")+Math.abs(per.getHours())+" hour(s)";
+						Alfred.println("general", "Index "+this.name+" would have had routing changed for being "+expireTime+" older than expiry time.");
+					} else if (this.timeunit.equalsIgnoreCase("day")) {
+						String expireTime = Math.abs(per.getDays())+" days";
+						Alfred.println("general", "Index "+this.name+" would have had routing changed for being "+expireTime+" older than expiry time.");
+					} else {
+						Alfred.println("general", "Index "+this.name+" would have had routing changed.");
+					}
+				}
+			}
+		}
 	}
 }
