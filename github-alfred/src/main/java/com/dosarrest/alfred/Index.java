@@ -747,6 +747,7 @@ public class Index {
 					check = true;
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				Alfred.println("error", "Check Routing Exception: "+e.getMessage());
 			}
 		}
