@@ -66,7 +66,7 @@ public class Alfred {
 	public static Boolean debug = false;
 	public static String verbosity = "info"; // debug|info|warn|error|fatal
 	public static Options options = new Options();
-	private static String version = "0.0.3";
+	private static String version = "0.0.4";
 	private HashMap<String,Index> indexes = new HashMap<String,Index>();
 	public static HashMap<String,Node> nodes = new HashMap<String,Node>();
 	
