@@ -759,15 +759,41 @@ public class Index {
 		if (this.open==true) {
 			if (Alfred.run) {
 				if (checkRouting()) {
+					JsonObject newAllocation = new JsonObject();
+					JsonObject newRouting = new JsonObject();
+					JsonObject newIndex = new JsonObject();
+					for (String route : Alfred.allocation) {
+						try {
+							String[] sRoute = route.split("=");
+							String routeValue = sRoute[1];
+							String[] routeKey = sRoute[0].split("\\.");
+							String routeType = routeKey[0];
+							String routeItem = routeKey[1];
+							if (newAllocation.has(routeType)) {
+								newAllocation.getAsJsonObject(routeType).addProperty(routeItem, routeValue);
+							} else {
+								JsonObject newTypeEntry = new JsonObject();
+								newTypeEntry.addProperty(routeItem, routeValue);
+								newAllocation.add(routeType, newTypeEntry);
+							}
+						} catch (Exception e) {
+							Alfred.println("error", "Check Routing Exception: "+e.getMessage());
+						}
+					}
+					newRouting.add("routing", newAllocation);
+					newIndex.add("index", newRouting);
+					newIndex.toString();
+					Alfred.println("info", "Allocation settings changed to: "+newIndex.toString());
+					
 					try {
-						Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+						Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 					} catch (Exception e) {
 			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
 			        	if (Alfred.retries>1) {
 			        		int r = 1;
 			        		while (r!=Alfred.retries) {
 			        			try {
-			        				Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+			        				Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 			        				r = Alfred.retries;
 			        			} catch (Exception ce) {
 			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
@@ -791,15 +817,40 @@ public class Index {
 		if (this.open==true) {
 			if (Alfred.run) {
 				if (checkRouting()) {
+					JsonObject newAllocation = new JsonObject();
+					JsonObject newRouting = new JsonObject();
+					JsonObject newIndex = new JsonObject();
+					for (String route : Alfred.allocation) {
+						try {
+							String[] sRoute = route.split("=");
+							String routeValue = sRoute[1];
+							String[] routeKey = sRoute[0].split("\\.");
+							String routeType = routeKey[0];
+							String routeItem = routeKey[1];
+							if (newAllocation.has(routeType)) {
+								newAllocation.getAsJsonObject(routeType).addProperty(routeItem, routeValue);
+							} else {
+								JsonObject newTypeEntry = new JsonObject();
+								newTypeEntry.addProperty(routeItem, routeValue);
+								newAllocation.add(routeType, newTypeEntry);
+							}
+						} catch (Exception e) {
+							Alfred.println("error", "Check Routing Exception: "+e.getMessage());
+						}
+					}
+					newRouting.add("routing", newAllocation);
+					newIndex.add("index", newRouting);
+					newIndex.toString();
+					Alfred.println("info", "Allocation settings changed to: "+newIndex.toString());
 					try {
-						Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+						Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 					} catch (Exception e) {
 			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
 			        	if (Alfred.retries>1) {
 			        		int r = 1;
 			        		while (r!=Alfred.retries) {
 			        			try {
-			        				Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+			        				Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 			        				r = Alfred.retries;
 			        			} catch (Exception ce) {
 			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
