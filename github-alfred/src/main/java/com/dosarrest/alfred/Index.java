@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.http.client.ClientProtocolException;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
@@ -136,7 +137,19 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_flush");
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.postURL("/"+this.name+"/_flush");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -160,7 +173,19 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_flush");
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.postURL("/"+this.name+"/_flush");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been flushed.");
@@ -179,7 +204,19 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_close");
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.postURL("/"+this.name+"/_close");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -205,7 +242,19 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_close");
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.postURL("/"+this.name+"/_close");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been closed.");
@@ -224,7 +273,19 @@ public class Index {
 				try {
 					Alfred.postURL("/"+this.name+"/_open");
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.postURL("/"+this.name+"/_open");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -248,9 +309,21 @@ public class Index {
 		} else {
 			if (Alfred.run) {
 				try {
-					Alfred.postURL("/"+this.name+"/_close");
+					Alfred.postURL("/"+this.name+"/_open");
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.postURL("/"+this.name+"/_open");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been opened.");
@@ -267,8 +340,19 @@ public class Index {
 				try {
 					Alfred.deleteURL("/"+this.name+"/");
 				} catch (Exception e) {
-					e.printStackTrace();
-					Alfred.println("error", "Exception: "+e.getStackTrace().toString());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.deleteURL("/"+this.name+"/");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -292,8 +376,19 @@ public class Index {
 				try {
 					Alfred.deleteURL("/"+this.name+"/");
 				} catch (Exception e) {
-					e.printStackTrace();
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.deleteURL("/"+this.name+"/");
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have been deleted.");
@@ -313,7 +408,19 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=true");
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=true");
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				} else {
 					if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -341,7 +448,19 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=true");
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=true");
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				} else {
 					Alfred.println("general", "Index "+this.name+" would have had bloom filter enabled.");
@@ -362,7 +481,19 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=false");
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=false");
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				} else {
 					if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -390,7 +521,19 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=false");
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.putURL("/"+this.name+"/_settings?index.codec.bloom.load=false");
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				} else {
 					Alfred.println("general", "Index "+this.name+" would have had bloom filter disabled.");
@@ -412,7 +555,19 @@ public class Index {
 					try {
 						Alfred.postURL("/"+this.name+"/_optimize?max_num_segments="+segments);
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.postURL("/"+this.name+"/_optimize?max_num_segments="+segments);
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				} else {
 					if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -441,7 +596,19 @@ public class Index {
 					try {
 						Alfred.postURL("/"+this.name+"/_optimize?max_num_segments="+segments);
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.postURL("/"+this.name+"/_optimize?max_num_segments="+segments);
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				} else {
 					Alfred.println("general", "Index "+this.name+" would have been optimized.");
@@ -462,7 +629,19 @@ public class Index {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				if (this.timeunit.equalsIgnoreCase("hour")) {
@@ -489,7 +668,19 @@ public class Index {
 				try {
 					Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
 				} catch (Exception e) {
-					Alfred.println("error", "Exception: "+e.getMessage());
+		        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+		        	if (Alfred.retries>1) {
+		        		int r = 1;
+		        		while (r!=Alfred.retries) {
+		        			try {
+		        				Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+		        				r = Alfred.retries;
+		        			} catch (Exception ce) {
+		        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+		        				r++;
+		        			}
+		        		}
+		        	}
 				}
 			} else {
 				Alfred.println("general", "Index "+this.name+" would have had settings changed.");
@@ -571,7 +762,19 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				}
 			} else {
@@ -591,7 +794,19 @@ public class Index {
 					try {
 						Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
 					} catch (Exception e) {
-						Alfred.println("error", "Exception: "+e.getMessage());
+			        	Alfred.println("error", "Client Error in request: "+e.getMessage());
+			        	if (Alfred.retries>1) {
+			        		int r = 1;
+			        		while (r!=Alfred.retries) {
+			        			try {
+			        				Alfred.putURL("/"+this.name+"/_settings", Alfred.settings);
+			        				r = Alfred.retries;
+			        			} catch (Exception ce) {
+			        				Alfred.println("error", "Client Error in request: "+ce.getMessage());
+			        				r++;
+			        			}
+			        		}
+			        	}
 					}
 				}
 			} else {
