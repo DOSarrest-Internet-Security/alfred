@@ -13,7 +13,7 @@ Tested on ElasticSearch Versions:
 1.4  
 May work on previous versions  
 
-[Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.3-SNAPSHOT-jar-with-dependencies.jar)
+[Download Current](https://github.com/DOSarrest-Internet-Security/alfred/raw/master/builds/alfred-0.0.4-SNAPSHOT-jar-with-dependencies.jar)
 
 ```
 usage: alfred
