@@ -730,7 +730,10 @@ public class Index {
 		for (String route : Alfred.allocation) {
 			try {
 				String[] sRoute = route.split("=");
-				String routeValue = sRoute[1];
+				String routeValue = "";
+				if (sRoute.length==1) {
+					routeValue = sRoute[1];
+				}
 				String[] routeKey = sRoute[0].split("\\.");
 				String routeType = routeKey[0];
 				String routeItem = routeKey[1];
@@ -757,36 +760,40 @@ public class Index {
 	 * Change routing settings
 	 */
 	public void updateRouting() {
+		JsonObject newAllocation = new JsonObject();
+		JsonObject newRouting = new JsonObject();
+		JsonObject newIndex = new JsonObject();
+		for (String route : Alfred.allocation) {
+			try {
+				String[] sRoute = route.split("=");
+				String routeValue = "";
+				if (sRoute.length==1) {
+					routeValue = sRoute[1];
+				}
+				String[] routeKey = sRoute[0].split("\\.");
+				String routeType = routeKey[0];
+				String routeItem = routeKey[1];
+				if (newAllocation.has(routeType)) {
+					newAllocation.getAsJsonObject(routeType).addProperty(routeItem, routeValue);
+				} else {
+					JsonObject newTypeEntry = new JsonObject();
+					newTypeEntry.addProperty(routeItem, routeValue);
+					newAllocation.add(routeType, newTypeEntry);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				Alfred.println("error", "Check Routing Exception: "+e.getMessage());
+			}
+		}
+		newRouting.add("routing", newAllocation);
+		newIndex.add("index", newRouting);
+		newIndex.toString();
+		JsonObject allocationSettings = settings.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation");
 		if (this.open==true) {
 			if (Alfred.run) {
 				if (checkRouting()) {
-					JsonObject newAllocation = new JsonObject();
-					JsonObject newRouting = new JsonObject();
-					JsonObject newIndex = new JsonObject();
-					for (String route : Alfred.allocation) {
-						try {
-							String[] sRoute = route.split("=");
-							String routeValue = sRoute[1];
-							String[] routeKey = sRoute[0].split("\\.");
-							String routeType = routeKey[0];
-							String routeItem = routeKey[1];
-							if (newAllocation.has(routeType)) {
-								newAllocation.getAsJsonObject(routeType).addProperty(routeItem, routeValue);
-							} else {
-								JsonObject newTypeEntry = new JsonObject();
-								newTypeEntry.addProperty(routeItem, routeValue);
-								newAllocation.add(routeType, newTypeEntry);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-							Alfred.println("error", "Check Routing Exception: "+e.getMessage());
-						}
-					}
-					newRouting.add("routing", newAllocation);
-					newIndex.add("index", newRouting);
-					newIndex.toString();
+					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
 					Alfred.println("info", "Allocation settings changed to: "+newIndex.toString());
-					
 					try {
 						Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 					} catch (Exception e) {
@@ -807,6 +814,8 @@ public class Index {
 				}
 			} else {
 				if (checkRouting()) {
+					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
+					Alfred.println("info", "Allocation settings would be changed to: "+newIndex.toString());
 					Alfred.println("general", "Index "+this.name+" would have had routing changed");
 				}
 			}
@@ -816,34 +825,39 @@ public class Index {
 	 * Change routing settings
 	 */
 	public void updateRouting(Period per) {
+		JsonObject newAllocation = new JsonObject();
+		JsonObject newRouting = new JsonObject();
+		JsonObject newIndex = new JsonObject();
+		for (String route : Alfred.allocation) {
+			try {
+				String[] sRoute = route.split("=");
+				String routeValue = "";
+				if (sRoute.length==1) {
+					routeValue = sRoute[1];
+				}
+				String[] routeKey = sRoute[0].split("\\.");
+				String routeType = routeKey[0];
+				String routeItem = routeKey[1];
+				if (newAllocation.has(routeType)) {
+					newAllocation.getAsJsonObject(routeType).addProperty(routeItem, routeValue);
+				} else {
+					JsonObject newTypeEntry = new JsonObject();
+					newTypeEntry.addProperty(routeItem, routeValue);
+					newAllocation.add(routeType, newTypeEntry);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				Alfred.println("error", "Check Routing Exception: "+e.getMessage());
+			}
+		}
+		newRouting.add("routing", newAllocation);
+		newIndex.add("index", newRouting);
+		newIndex.toString();
+		JsonObject allocationSettings = settings.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation");
 		if (this.open==true) {
 			if (Alfred.run) {
 				if (checkRouting()) {
-					JsonObject newAllocation = new JsonObject();
-					JsonObject newRouting = new JsonObject();
-					JsonObject newIndex = new JsonObject();
-					for (String route : Alfred.allocation) {
-						try {
-							String[] sRoute = route.split("=");
-							String routeValue = sRoute[1];
-							String[] routeKey = sRoute[0].split("\\.");
-							String routeType = routeKey[0];
-							String routeItem = routeKey[1];
-							if (newAllocation.has(routeType)) {
-								newAllocation.getAsJsonObject(routeType).addProperty(routeItem, routeValue);
-							} else {
-								JsonObject newTypeEntry = new JsonObject();
-								newTypeEntry.addProperty(routeItem, routeValue);
-								newAllocation.add(routeType, newTypeEntry);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-							Alfred.println("error", "Check Routing Exception: "+e.getMessage());
-						}
-					}
-					newRouting.add("routing", newAllocation);
-					newIndex.add("index", newRouting);
-					newIndex.toString();
+					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
 					Alfred.println("info", "Allocation settings changed to: "+newIndex.toString());
 					try {
 						Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
@@ -865,6 +879,8 @@ public class Index {
 				}
 			} else {
 				if (checkRouting()) {
+					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
+					Alfred.println("info", "Allocation settings would be changed to: "+newIndex.toString());
 					if (this.timeunit.equalsIgnoreCase("hour")) {
 						String expireTime = (per.getYears()!=0?" "+Math.abs(per.getYears())+" year(s)":"")+(per.getDays()!=0?" "+Math.abs(per.getDays())+" day(s)":"")+Math.abs(per.getHours())+" hour(s)";
 						Alfred.println("general", "Index "+this.name+" would have had routing changed for being "+expireTime+" older than expiry time.");
