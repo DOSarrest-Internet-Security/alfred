@@ -854,7 +854,7 @@ public class Index {
 		newRouting.add("routing", newAllocation);
 		newIndex.add("index", newRouting);
 		newIndex.toString();
-		Alfred.println("debug", "Index "+this.name+" settings: "+settings.toString());
+		Alfred.println("debug", "Index "+this.name+" settings: "+settings);
 		JsonObject allocationSettings = settings.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation");
 		if (this.open==true) {
 			if (Alfred.run) {
