@@ -14,6 +14,7 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 
@@ -808,28 +809,182 @@ public class Alfred {
 	}
 
 	/**
+	 * Check command line arguments and set internal variables
+	 * @param args
+	 * @return
+	 */
+	private static Boolean checkArgParse(Namespace args) {
+		debug = (args.getString("debug")=="default"?false:true);
+		if (debug) {
+			if (args.getString("debug").matches("^(debug|info|warn|error|fatal)+$")) {
+				verbosity = args.getString("debug");
+			}
+		}
+		if (args.getString("style").matches("^(time|size)$")) {
+			style = args.getString("style");
+			println("debug", "Style Parameter: "+style);
+		}
+		host = args.getString("host");
+		println("debug", "Host Parameter: "+host);
+		port = args.getString("port");
+		println("debug", "Port Parameter: "+port);
+		ssl = args.getBoolean("ssl");
+		index = args.getString("index");
+		println("debug", "Index Parameter: "+index);
+		timeout = args.getInt("timeout");
+		println("debug", "Timeout Parameter: "+timeout);
+		
+		if (args.getString("cmd").equalsIgnoreCase("index")) {
+			timeUnit = args.getString("time_unit");
+			println("debug", "TimeUnit Parameter: "+timeUnit);
+			expireTime = args.getInt("expire");
+			println("debug", "ExpireTime Parameter: "+expireTime);
+			sizeLimit = parseByteSize(args.getString("expiresize"));
+			println("debug", "Expire Size Parameter: "+sizeLimit);
+			excludes = args.getList("exclude").toArray(new String[0]);
+			String eString = "";
+			if (excludes.length==1) {
+				eString = excludes[0];
+			} else if (excludes.length!=0) {
+				for (String es : excludes) {
+					eString += (eString.equalsIgnoreCase("")?"":",")+es;
+				}
+			}
+			println("debug", "Exclude: "+eString);
+			
+			if (args.getString("indexCmd").equalsIgnoreCase("show")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("flush")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("close")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("open")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("delete")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("bloom")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("debloom")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("optimize")) {
+				max_num_segments = args.getInt("max_num_segments");
+				println("debug", "max_num_segments Parameter: "+max_num_segments);
+			} else if (args.getString("indexCmd").equalsIgnoreCase("settings")) {
+			} else if (args.getString("indexCmd").equalsIgnoreCase("route")) {
+				
+			}
+		}
+		
+		if (cmd.hasOption("a")) {
+			allocation = cmd.getOptionValues("a");
+			println("debug", "Allocations: "+allocation);
+		}
+		delete = cmd.hasOption("delete");
+		if (delete) {
+			println("debug", "Delete Parameter: "+delete);
+		}
+		close = cmd.hasOption("close");
+		if (close) {
+			println("debug", "Close Parameter: "+close);
+		}
+		open = cmd.hasOption("open");
+		if (open) {
+			println("debug", "Open Parameter: "+open);
+		}
+		bloom = cmd.hasOption("B");
+		if (bloom) {
+			println("debug", "Bloom Parameter: "+bloom);
+		}
+		debloom = cmd.hasOption("b");
+		if (debloom) {
+			println("debug", "Debloom Parameter: "+debloom);
+		}
+		optimize = cmd.hasOption("optimize");
+		if (optimize) {
+			println("debug", "Optimize Parameter: "+optimize);
+		}
+		flush = cmd.hasOption("flush");
+		if (flush) {
+			println("debug", "Flush Parameter: "+flush);
+		}
+		if (cmd.hasOption("S")) {
+			settings = (String) cmd.getOptionValue("S");
+			println("debug", "Settings Parameter: "+settings);
+		}
+		examples = cmd.hasOption("examples");
+		run = cmd.hasOption("r");
+		if (run) {
+			println("debug", "Run Parameter: "+run);
+		}
+		if (optimize && timeout<360) {
+			println("warn", "Timeout value is set too low (Current: "+timeout+") (Recommended: 3600 or greater)");
+		}
+		if (cmd.hasOption("R")) {
+			retries = Integer.parseInt((String) cmd.getOptionValue("R"));
+			println("debug", "Retries Parameter: "+retries);
+		}
+		if (retries==0) {
+			println("fatal", "Retries cannot be 0");
+			return false;
+		} else if (retries<0) {
+			println("fatal", "Retries cannot be less than 0");
+			return false;
+		}
+		return true;
+	}
+	private static Namespace argParse(String[] args) {
+		ArgumentParser parser = ArgumentParsers.newArgumentParser("alfred");
+		parser.addArgument("--debug", "-D").setDefault("default").help("Display debugging (debug|info|warn|error|fatal)");
+		parser.addArgument("--host").setDefault("localhost").help("ElasticSearch Host (Default: localhost)");
+		parser.addArgument("--port").setDefault("9200").help("ElasticSearch Port (Default: 9200)");
+		parser.addArgument("--ssl").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("ElasticSearch uses SSL");
+		parser.addArgument("--examples").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Show Alfred examples");
+		parser.addArgument("--run", "-r").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Execute changes");
+		parser.addArgument("--timeout", "-t").setDefault(30).type(int.class).help("Set Timeout");
+		parser.addArgument("--retries", "-R").setDefault(1).type(int.class).help("Number of retries on http error");
+	    Subparsers subparsers = parser.addSubparsers().title("subcommands")
+	            .description("valid subcommands").help("additional help")
+	            .metavar("COMMAND").dest("cmd");
+	    Subparser index = subparsers.addParser("index").aliases("indices", "i").help("index help");
+	    index.addArgument("--index", "-i").setDefault("_all").help("Index pattern (Default _all)");
+	    index.addArgument("--style", "-s").setDefault("time").help("Clean up style (time|size) (Default time)");
+	    index.addArgument("--time-unit", "-T").help("Set time unit to use");
+	    index.addArgument("--expire", "-e").help("Set time unit to use");
+	    index.addArgument("--expiresize", "-E").help("Set expire size");
+	    index.addArgument("--exclude", "-x").action(Arguments.append()).help("Index patterns to exclude");
+	    index.addArgument("--flush", "-f").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Flush indices");
+	    index.addArgument("--close", "-c").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Close indices");
+	    index.addArgument("--open", "-O").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Open indices");
+	    index.addArgument("--delete", "-d").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Delete indices");
+	    index.addArgument("--bloom", "-B").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Bloom indices");
+	    index.addArgument("--debloom", "-b").action(Arguments.storeConst()).setConst(true).type(boolean.class).setDefault(false).help("Disable Bloom on indices");
+	    Subparsers indexSubParsers = index.addSubparsers().title("subcommands").description("valid subcommands").help("additional help").metavar("COMMAND").dest("indexCmd");
+	    Subparser optimizeSP = indexSubParsers.addParser("optimize").help("Optimize indices");
+	    optimizeSP.addArgument("--max_num_segments", "-s").help("Set max number of segments");
+	    Subparser settingsSP = indexSubParsers.addParser("settings").help("Set indices settings");
+	    settingsSP.addArgument("--settings", "-s").help("Settings to set");
+	    Subparser routeSP = indexSubParsers.addParser("route").help("Change indices allocation routing");
+	    routeSP.addArgument("--require").action(Arguments.append()).help("Require settings");
+	    routeSP.addArgument("--exclude").action(Arguments.append()).help("Exclude settings");
+	    routeSP.addArgument("--include").action(Arguments.append()).help("Include settings");
+	    
+	    Subparser snapshot = subparsers.addParser("snapshot").aliases("s").help("snapshot help");
+	    Subparsers snapshotSubParsers = snapshot.addSubparsers().title("subcommands").description("valid subcommands").help("additional help").metavar("COMMAND").dest("snapshotCmd");
+	    snapshotSubParsers.addParser("show").help("Show snapshots");
+	    snapshotSubParsers.addParser("create").help("Create snapshots");
+	    snapshotSubParsers.addParser("restore").help("Restore snapshots");
+	    try {
+	    	Namespace ns = parser.parseArgs(args);
+	    	System.out.println(parser.parseArgs(args));
+	    	return ns;
+	    } catch (ArgumentParserException e) {
+	        parser.handleError(e);
+	    }
+	    return null;
+	}
+	
+	/**
 	 * Main function which starts Alfred
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		ArgumentParser parser = ArgumentParsers.newArgumentParser("prog");
-	    Subparsers subparsers = parser.addSubparsers().title("subcommands")
-	            .description("valid subcommands").help("additional help")
-	            .metavar("COMMAND");
-	    Subparser index = subparsers.addParser("index").help("index help");
-	    Subparsers indexSubParsers = index.addSubparsers().title("subcommands").description("valid subcommands").help("additional help").metavar("COMMAND");
-	    indexSubParsers.addParser("");
-	    Subparser snapshot = subparsers.addParser("snapshot").help("snapshot help");
-	    Subparsers snnapshotSubParsers = index.addSubparsers().title("subcommands").description("valid subcommands").help("additional help").metavar("COMMAND");
-	    
-	    try {
-	        System.out.println(parser.parseArgs(args));
-	    } catch (ArgumentParserException e) {
-	        parser.handleError(e);
-	        System.exit(1);
-	    }
-		
-		
+	public static void main(String[] args) {	    
+		Namespace ns = argParse(args);
+		if (ns!=null) {
+			checkArgParse(ns);
+		}
 		setOptions();
 		if (args.length>0) {
 			if (checkArgs(args)) {
