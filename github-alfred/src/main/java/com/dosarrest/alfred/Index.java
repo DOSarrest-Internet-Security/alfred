@@ -777,6 +777,7 @@ public class Index {
 								newAllocation.add(routeType, newTypeEntry);
 							}
 						} catch (Exception e) {
+							e.printStackTrace();
 							Alfred.println("error", "Check Routing Exception: "+e.getMessage());
 						}
 					}
@@ -835,6 +836,7 @@ public class Index {
 								newAllocation.add(routeType, newTypeEntry);
 							}
 						} catch (Exception e) {
+							e.printStackTrace();
 							Alfred.println("error", "Check Routing Exception: "+e.getMessage());
 						}
 					}
