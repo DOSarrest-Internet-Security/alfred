@@ -255,9 +255,11 @@ public class Alfred {
 				for (Entry<String, JsonElement> indexEntry : indicesSet) {
 					String name = indexEntry.getKey();
 					Boolean hasExclude = false;
-					for (String exclude : excludes) {
-						if (name.contains(exclude)) {
-							hasExclude = true;
+					if (excludes!=null) {
+						for (String exclude : excludes) {
+							if (name.contains(exclude)) {
+								hasExclude = true;
+							}
 						}
 					}
 					if (hasExclude==false) {
