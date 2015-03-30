@@ -111,10 +111,10 @@ public class Index {
 				if (bloomValue==false) {
 					this.bloom = false;
 				}
-				this.settings = docStatsO.getAsJsonObject(this.name).getAsJsonObject("settings");
 			} catch (NullPointerException e) {
 				this.bloom = true;
 			}
+			this.settings = docStatsO.getAsJsonObject(this.name).getAsJsonObject("settings");
 			this.shardCount = docStatsO.getAsJsonObject(this.name)
 					.getAsJsonObject("settings")
 					.getAsJsonObject("index")
