@@ -108,7 +108,7 @@ public class Alfred {
 							if (bloom) { indexInfo.bloom(revPer); }
 							if (debloom) { indexInfo.debloom(revPer); }
 							if (delete) { indexInfo.delete(revPer); }
-							if (allocation.length!=0) { indexInfo.updateRouting(revPer); }
+							if (allocation!=null) { if (allocation.length!=0) { indexInfo.updateRouting(revPer); } }
 							if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(revPer); }
 						} else {
 							println("general", index+" is "+per.getHours()+" hours above the cuttoff.");
@@ -132,7 +132,7 @@ public class Alfred {
 							if (bloom) { indexInfo.bloom(revPer); }
 							if (debloom) { indexInfo.debloom(revPer); }
 							if (delete) { indexInfo.delete(revPer); }
-							if (allocation.length!=0) { indexInfo.updateRouting(revPer); }
+							if (allocation!=null) { if (allocation.length!=0) { indexInfo.updateRouting(revPer); } }
 							if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(revPer); }
 						} else {
 							println("general", index+" is "+per.getDays()+" days above the cuttoff.");
@@ -151,7 +151,7 @@ public class Alfred {
 						if (bloom) { indexInfo.bloom(); }
 						if (debloom) { indexInfo.debloom(); }
 						if (delete) { indexInfo.delete(); }
-						if (allocation.length!=0) { indexInfo.updateRouting(); }
+						if (allocation!=null) { if (allocation.length!=0) { indexInfo.updateRouting(); } }
 						if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(); }
 					}
 				}
@@ -175,7 +175,7 @@ public class Alfred {
 					if (bloom) { indexInfo.bloom(); }
 					if (debloom) { indexInfo.debloom(); }
 					if (delete) { indexInfo.delete(); }
-					if (allocation.length!=0) { indexInfo.updateRouting(); }
+					if (allocation!=null) { if (allocation.length!=0) { indexInfo.updateRouting(); } }
 					if (!settings.equalsIgnoreCase("")) { indexInfo.putSettings(); }
 				} else {
 					long diff = Math.abs(size-sizeLimit);
