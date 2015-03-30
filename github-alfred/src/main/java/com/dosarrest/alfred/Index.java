@@ -794,7 +794,7 @@ public class Index {
 			if (Alfred.run) {
 				if (checkRouting()) {
 					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
-					Alfred.println("info", "Allocation settings changed to: "+newIndex.toString());
+					Alfred.println("info", "Allocation settings changed to: "+newIndex.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation").toString());
 					try {
 						Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 					} catch (Exception e) {
@@ -816,7 +816,7 @@ public class Index {
 			} else {
 				if (checkRouting()) {
 					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
-					Alfred.println("info", "Allocation settings would be changed to: "+newIndex.toString());
+					Alfred.println("info", "Allocation settings changed to: "+newIndex.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation").toString());
 					Alfred.println("general", "Index "+this.name+" would have had routing changed");
 				}
 			}
@@ -860,7 +860,7 @@ public class Index {
 			if (Alfred.run) {
 				if (checkRouting()) {
 					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
-					Alfred.println("info", "Allocation settings changed to: "+newIndex.toString());
+					Alfred.println("info", "Allocation settings changed to: "+newIndex.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation").toString());
 					try {
 						Alfred.putURL("/"+this.name+"/_settings", newIndex.toString());
 					} catch (Exception e) {
@@ -882,7 +882,7 @@ public class Index {
 			} else {
 				if (checkRouting()) {
 					Alfred.println("info", "Old allocation settings: "+allocationSettings.toString());
-					Alfred.println("info", "Allocation settings would be changed to: "+newIndex.toString());
+					Alfred.println("info", "Allocation settings changed to: "+newIndex.getAsJsonObject("index").getAsJsonObject("routing").getAsJsonObject("allocation").toString());
 					if (this.timeunit.equalsIgnoreCase("hour")) {
 						String expireTime = (per.getYears()!=0?" "+Math.abs(per.getYears())+" year(s)":"")+(per.getDays()!=0?" "+Math.abs(per.getDays())+" day(s)":"")+Math.abs(per.getHours())+" hour(s)";
 						Alfred.println("general", "Index "+this.name+" would have had routing changed for being "+expireTime+" older than expiry time.");
