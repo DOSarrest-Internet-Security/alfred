@@ -17,6 +17,9 @@ May work on previous versions
 
 ```
 usage: alfred
+ -a,--allocation <arg>         Allocation settings (Ex.
+                               require.tag=historical,exclude.tag=realtime
+                               )
  -b,--debloom                  Disable Bloom on Indexes
  -B,--bloom                    Enable Bloom on Indexes
  -c,--close                    Close Indexes
@@ -35,6 +38,7 @@ usage: alfred
     --port <arg>               ElasticSearch Port
  -r,--run                      Required to execute changes on
                                ElasticSearch
+ -R,--retries <arg>            Number of retries on http error (Default 1)
  -s,--style <arg>              Clean up style (time|size) (Default time)
  -S,--settings <arg>           PUT settings
     --ssl                      ElasticSearch SSL
@@ -42,7 +46,7 @@ usage: alfred
                                hour)
  -t,--timeout <arg>            ElasticSearch Timeout (Default 30)
  -x,--exclude <arg>            Index pattern to exclude
-Alfred Version: 0.0.3
+Alfred Version: 0.0.4
 ```
 
 Alfred was built as a tool to handle maintenance work on ElasticSearch.
