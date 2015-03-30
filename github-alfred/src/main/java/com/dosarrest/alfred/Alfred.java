@@ -10,6 +10,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Subparser;
+import net.sourceforge.argparse4j.inf.Subparsers;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -805,6 +812,24 @@ public class Alfred {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		ArgumentParser parser = ArgumentParsers.newArgumentParser("prog");
+	    Subparsers subparsers = parser.addSubparsers().title("subcommands")
+	            .description("valid subcommands").help("additional help")
+	            .metavar("COMMAND");
+	    Subparser index = subparsers.addParser("index").help("index help");
+	    Subparsers indexSubParsers = index.addSubparsers().title("subcommands").description("valid subcommands").help("additional help").metavar("COMMAND");
+	    indexSubParsers.addParser("");
+	    Subparser snapshot = subparsers.addParser("snapshot").help("snapshot help");
+	    Subparsers snnapshotSubParsers = index.addSubparsers().title("subcommands").description("valid subcommands").help("additional help").metavar("COMMAND");
+	    
+	    try {
+	        System.out.println(parser.parseArgs(args));
+	    } catch (ArgumentParserException e) {
+	        parser.handleError(e);
+	        System.exit(1);
+	    }
+		
+		
 		setOptions();
 		if (args.length>0) {
 			if (checkArgs(args)) {
