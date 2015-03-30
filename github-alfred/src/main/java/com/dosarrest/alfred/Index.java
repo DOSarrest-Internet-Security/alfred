@@ -731,7 +731,7 @@ public class Index {
 			try {
 				String[] sRoute = route.split("=");
 				String routeValue = "";
-				if (sRoute.length==1) {
+				if (sRoute.length==2) {
 					routeValue = sRoute[1];
 				}
 				String[] routeKey = sRoute[0].split("\\.");
@@ -767,7 +767,7 @@ public class Index {
 			try {
 				String[] sRoute = route.split("=");
 				String routeValue = "";
-				if (sRoute.length==1) {
+				if (sRoute.length==2) {
 					routeValue = sRoute[1];
 				}
 				String[] routeKey = sRoute[0].split("\\.");
@@ -832,7 +832,7 @@ public class Index {
 			try {
 				String[] sRoute = route.split("=");
 				String routeValue = "";
-				if (sRoute.length==1) {
+				if (sRoute.length==2) {
 					routeValue = sRoute[1];
 				}
 				String[] routeKey = sRoute[0].split("\\.");
