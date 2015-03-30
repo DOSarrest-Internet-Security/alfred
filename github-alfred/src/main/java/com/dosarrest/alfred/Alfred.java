@@ -43,6 +43,7 @@ public class Alfred {
 	private static String host = "localhost";
 	private static String port = "9200";
 	private static Boolean ssl = false;
+	public static int retries = 1;
 	private static int timeout = 30;
 	private static String style = "time";
 	private static long sizeLimit = (1024*1024*1024*1024)*10;
@@ -726,6 +727,17 @@ public class Alfred {
 			if(cmd.hasOption( "h" )) {
 				return false;
 			}
+			if (cmd.hasOption("R")) {
+				retries = Integer.parseInt((String) cmd.getOptionValue("R"));
+				println("debug", "Retries Parameter: "+retries);
+			}
+			if (retries==0) {
+				println("fatal", "Retries cannot be 0");
+				return false;
+			} else if (retries<0) {
+				println("fatal", "Retries cannot be less than 0");
+				return false;
+			}
 		} catch (ParseException e1) {
 			println("fatal", "Error parsing command line options!");
 			return false;
@@ -779,6 +791,7 @@ public class Alfred {
 		op14.setValueSeparator(',');
 		options.addOption(op14);
 		
+		options.addOption("R", "retries", true, "Number of retries on http error (Default 1)");
 		options.addOption(null, "examples", false, "Show some examples of how to use Alfred");
 		options.addOption("r", "run", false, "Required to execute changes on ElasticSearch");
 		options.addOption("D", "debug", true, "Display debug (debug|info|warn|error|fatal)");
